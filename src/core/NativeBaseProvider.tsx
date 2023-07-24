@@ -42,7 +42,6 @@ export interface NativeBaseProviderProps {
   children?: React.ReactNode;
   initialWindowMetrics?: any;
   config?: INativebaseConfig;
-  isSSR?: boolean;
   disableContrastText?: boolean;
   // Refer https://github.com/th3rdwave/react-native-safe-area-context#testing
 }
@@ -54,7 +53,6 @@ const NativeBaseProvider = (props: NativeBaseProviderProps) => {
     children,
     theme: propsTheme = defaultTheme,
     initialWindowMetrics,
-    isSSR,
     disableContrastText,
   } = props;
   const theme = config.theme ?? propsTheme;
@@ -78,7 +76,6 @@ const NativeBaseProvider = (props: NativeBaseProviderProps) => {
       theme={newTheme}
       config={config}
       currentBreakpoint={currentBreakpoint}
-      isSSR={isSSR}
       disableContrastText={disableContrastText}
     >
       <SafeAreaProvider
@@ -86,12 +83,12 @@ const NativeBaseProvider = (props: NativeBaseProviderProps) => {
           initialWindowMetrics ?? defaultInitialWindowMetricsBasedOnPlatform
         }
       >
-        <ResponsiveQueryProvider disableCSSMediaQueries={!isSSR}>
+        <ResponsiveQueryProvider>
           <HybridProvider
             colorModeManager={colorModeManager}
             options={theme.config}
           >
-            <OverlayProvider isSSR>
+            <OverlayProvider>
               <ToastProvider>
                 <InitializeToastRef />
                 <SSRProvider>{children}</SSRProvider>
